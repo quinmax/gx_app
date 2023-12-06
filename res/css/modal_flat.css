@@ -1,0 +1,12 @@
+.modal_flat_background { display: flex; flex-direction: row; align-items: center; justify-content: center;   background-color: #000; opacity: 0.8; pointer-events: none; }
+.modal_flat_main { border: 1px solid #333; box-shadow: 0px 8px 16px 0px rgba(255,255,255,0.2);  border-radius: 15px;  }
+
+/* font size only */
+.modal_flat_main, .modal_flat_main input, .modal_flat_main button {  font-size: 1.3rem; }
+
+.modal_flat_main input, .modal_flat_main button {  padding: 5px; box-sizing: border-box; }
+.modal_flat_inner { padding: 30px; background: white; color: #000;  border-radius: 15px; font-size: 2rem;}
+.modal_flat_content { margin: 20px 0px;}
+.modal_flat_input { margin: 20px 0px; font-size: 1.2rem;}
+.modal_flat_buttons { margin-top: 0px; pointer-events: auto;  }
+.modal_flat_main button { background-color: var(--app-secondary); color: white; padding: 0px 20px; border: 0px; cursor: pointer; outline: none; width: 100px;  }

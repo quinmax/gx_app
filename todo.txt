@@ -1,0 +1,65 @@
+Task
+
+Summary of daily schedule - bookings
+Can do basic operations - CRUD
+
+Need to authenticate - sessionUID
+
+REQUIREMENTS
+1. Show booking for a selected date
+2. Create a booking: select patient from list
+                     select time and duration for the booking
+					 set text reason for booking
+3. Can update a booking: Change time and duration					 
+                         Can change reason
+4. Can delete a booking	
+
+
+THINGS TO CONSIDER
+1. Form validation
+2. Data is clean/sanitized
+3. List is ordered by date and time		
+
+
+Bridge - Login : Notes
+// Fail: {"status":"AUTH_FAILED:CREDENTIALS"}
+// Good: {"status":"OK","data":{"uid":"0434abc5-cf20-45c3-a904-0e470b9c5610"}}
+
+
+//{"model":{"timeout":259200},"auth":[["password",{"username":"applicant_001","password":"app001"}]]}
+//{"model":{"timeout":259200},"auth":[["password",{"username":"applicant_001","password":"app001"}]]}
+
+<div onclick="router.booking_list()">Bookings</div>
+
+Booking statuses
+1. Booked
+2. Arrived
+3. Ready
+4. Treated
+5. Done
+
+Booking Type
+1. Consultation
+2. Follow update
+3. Meeting
+4. Out of office
+
+
+// Create booking data needed
+"model": 
+    {
+      #  "entity_uid": {{entity_uid}}, // Entity for which the booking is created
+      #  "diary_uid": {{diary_uid}}, // Entity on which the booking is created
+      #*  "booking_type_uid": {{booking_type_uid}}, // Type of booking to be created
+      #*  "booking_status_uid": {{booking_status_uid}}, // The status that the created booking should be set to.
+      x  "start_time": "{{date_string}}T08:00:00", // Start date and time for the created booking.
+      x  "duration": 15, // Duration for the booking
+      #  "patient_uid": {{patient_uid}}, // Patient for which the booking is created
+      x  "reason": "Cool example reason here", // A reason for the created booking. (e.g Patient has neck pain)
+      #*x  "cancelled": false // Is the booking cancelled? (Make false to actually show the booking in GXWeb)
+    }
+
+
+PHP Retrieve cookie:
+$cookie = $_COOKIE["uid"];
+echo "COOKIE: " . $cookie;
