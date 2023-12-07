@@ -37,6 +37,10 @@ const login =
 	logout()
 	{
 		this.eraseCookie('uid');
+		this.eraseCookie('entity_uid');
+		this.eraseCookie('diary_uid');
+		this.eraseCookie('diary_name');
+
 		router.logout();
 	},
 

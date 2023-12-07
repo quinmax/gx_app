@@ -1,7 +1,7 @@
 <?php 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-function login($cred_1, $cred_2)
+function login_old($cred_1, $cred_2)
 {
 	/** 
 	 * Commented out for dev/testing
@@ -29,23 +29,56 @@ function login($cred_1, $cred_2)
 	echo $result;
 }
 
-function get_diaries($uid)
+function login($cred_1, $cred_2)
 {
-	$url = 'https://dev_interview.qagoodx.co.za/api/diary?fields=';
-	$params = rawurlencode('["uid", "entity_uid", "treating_doctor_uid", "service_center_uid", "booking_type_uid", "name", "uuid", "disabled"]');
-	$api_call = $url . $params;
+	$san_cred_1 = filter_var($cred_1, FILTER_SANITIZE_STRING);
+	$san_cred_2 = filter_var($cred_2, FILTER_SANITIZE_STRING);
 
-	$result = get_api_call($api_call);
+	$curl = curl_init();
 
-	return $result;
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => 'https://dev_interview.qagoodx.co.za/api/session',
+	  CURLOPT_SSL_VERIFYPEER => false,
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => '',
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 0,
+	  CURLOPT_FOLLOWLOCATION => true,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => 'POST',
+	  CURLOPT_POSTFIELDS =>'{
+		"model": {
+			"timeout": 259200
+		},
+		"auth": [
+			[
+				"password",
+				{
+					"username": "' . $san_cred_1 . '",
+					"password": "' . $san_cred_2 . '"
+				}
+			]
+		]
+	}',
+	  CURLOPT_HTTPHEADER => array(
+		'Content-Type: application/json',
+		'Cookie: session_id="\\"8d0fa9cc-591c-481d-bf78-6608fedee7e4\\"_applicant_001"'
+	  ),
+	));
+	
+	$response = curl_exec($curl);
+	
+	curl_close($curl);
+
+	echo $response;
 }
 
-function get_bookings($uid)
+function get_diaries($uid)
 {
 	$curl = curl_init();
 
 	curl_setopt_array($curl, array(
-		CURLOPT_URL => 'https://dev_interview.qagoodx.co.za/api/booking?fields=[%0A%20%20%20%20[%22AS%22%2C[%22I%22%2C%22patient_uid%22%2C%22name%22]%2C%22patient_name%22]%2C%0A%20%20%20%20[%22AS%22%2C[%22I%22%2C%22patient_uid%22%2C%22surname%22]%2C%22patient_surname%22]%2C%0A%20%20%20%20[%22AS%22%2C[%22I%22%2C%22patient_uid%22%2C%22debtor_uid%22%2C%22name%22]%2C%22debtor_name%22]%2C%0A%20%20%20%20[%22AS%22%2C[%22I%22%2C%22patient_uid%22%2C%22debtor_uid%22%2C%22surname%22]%2C%22debtor_surname%22]%2C%0A%20%20%20%20%22uid%22%2C%0A%20%20%20%20%22entity_uid%22%2C%0A%20%20%20%20%22diary_uid%22%2C%0A%20%20%20%20%22booking_type_uid%22%2C%0A%20%20%20%20%22booking_status_uid%22%2C%0A%20%20%20%20%22patient_uid%22%2C%0A%20%20%20%20%22start_time%22%2C%0A%20%20%20%20%22duration%22%2C%0A%20%20%20%20%22treating_doctor_uid%22%2C%0A%20%20%20%20%22reason%22%2C%0A%20%20%20%20%22invoice_nr%22%2C%0A%20%20%20%20%22cancelled%22%2C%0A%20%20%20%20%22uuid%22%0A]',
+		CURLOPT_URL => 'https://dev_interview.qagoodx.co.za/api/diary?fields=[%0A%20%20%20%20%22uid%22%2C%0A%20%20%20%20%22entity_uid%22%2C%0A%20%20%20%20%22treating_doctor_uid%22%2C%0A%20%20%20%20%22service_center_uid%22%2C%0A%20%20%20%20%22booking_type_uid%22%2C%0A%20%20%20%20%22name%22%2C%0A%20%20%20%20%22uuid%22%2C%0A%20%20%20%20%22disabled%22%0A]',
 		CURLOPT_SSL_VERIFYPEER => false,
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_ENCODING => '',
@@ -56,7 +89,57 @@ function get_bookings($uid)
 		CURLOPT_CUSTOMREQUEST => 'GET',
 		CURLOPT_HTTPHEADER => array(
 			'Cookie: session_id="\\"8d0fa9cc-591c-481d-bf78-6608fedee7e4\\"_applicant_001"'
-	),
+		),
+	));
+
+	$response = curl_exec($curl);
+
+	curl_close($curl);
+
+	return $response;
+}
+
+function get_bookings($today)
+{
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+		CURLOPT_URL => 'https://dev_interview.qagoodx.co.za/api/booking?fields=[%0A%20%20%20%20[%22AS%22%2C[%22I%22%2C%22patient_uid%22%2C%22name%22]%2C%22patient_name%22]%2C%0A%20%20%20%20[%22AS%22%2C[%22I%22%2C%22patient_uid%22%2C%22surname%22]%2C%22patient_surname%22]%2C%0A%20%20%20%20[%22AS%22%2C[%22I%22%2C%22patient_uid%22%2C%22debtor_uid%22%2C%22name%22]%2C%22debtor_name%22]%2C%0A%20%20%20%20[%22AS%22%2C[%22I%22%2C%22patient_uid%22%2C%22debtor_uid%22%2C%22surname%22]%2C%22debtor_surname%22]%2C%0A%20%20%20%20%22uid%22%2C%0A%20%20%20%20%22entity_uid%22%2C%0A%20%20%20%20%22diary_uid%22%2C%0A%20%20%20%20%22booking_type_uid%22%2C%0A%20%20%20%20%22booking_status_uid%22%2C%0A%20%20%20%20%22patient_uid%22%2C%0A%20%20%20%20%22start_time%22%2C%0A%20%20%20%20%22duration%22%2C%0A%20%20%20%20%22treating_doctor_uid%22%2C%0A%20%20%20%20%22reason%22%2C%0A%20%20%20%20%22invoice_nr%22%2C%0A%20%20%20%20%22cancelled%22%2C%0A%20%20%20%20%22uuid%22%0A]&filter=[%0A%20%20%20%20%22AND%22%2C%0A%20%20%20%20[%0A%20%20%20%20%20%20%20%20%22%3D%22%2C%0A%20%20%20%20%20%20%20%20[%22I%22%2C%22diary_uid%22]%2C%0A%20%20%20%20%20%20%20%20[%22L%22%2C1]%0A%20%20%20%20]%2C%0A%20%20%20%20[%0A%20%20%20%20%20%20%20%20%22%3D%22%2C%0A%20%20%20%20%20%20%20%20[%0A%20%20%20%20%20%20%20%20%20%20%20%20%22%3A%3A%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20[%22I%22%2C%22start_time%22]%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20[%22I%22%2C%22date%22]%0A%20%20%20%20%20%20%20%20]%2C%0A%20%20%20%20%20%20%20%20[%22L%22%2C%22' . $today . '%22]%0A%20%20%20%20]%0A]',
+		CURLOPT_SSL_VERIFYPEER => false,
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_ENCODING => '',
+		CURLOPT_MAXREDIRS => 10,
+		CURLOPT_TIMEOUT => 0,
+		CURLOPT_FOLLOWLOCATION => true,
+		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		CURLOPT_CUSTOMREQUEST => 'GET',
+		CURLOPT_HTTPHEADER => array('Cookie: session_id="\\"8d0fa9cc-591c-481d-bf78-6608fedee7e4\\"_applicant_001"'),
+	));
+
+	$response = curl_exec($curl);
+
+	curl_close($curl);
+
+	return $response;
+}
+
+function get_edit_booking($booking_uid)
+{
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+		CURLOPT_URL => 'https://dev_interview.qagoodx.co.za/api/booking?fields=[%0A%20%20%20%20[%22AS%22%2C[%22I%22%2C%22patient_uid%22%2C%22name%22]%2C%22patient_name%22]%2C%0A%20%20%20%20[%22AS%22%2C[%22I%22%2C%22patient_uid%22%2C%22surname%22]%2C%22patient_surname%22]%2C%0A%20%20%20%20[%22AS%22%2C[%22I%22%2C%22patient_uid%22%2C%22debtor_uid%22%2C%22name%22]%2C%22debtor_name%22]%2C%0A%20%20%20%20[%22AS%22%2C[%22I%22%2C%22patient_uid%22%2C%22debtor_uid%22%2C%22surname%22]%2C%22debtor_surname%22]%2C%0A%20%20%20%20[%22AS%22%2C[%22I%22%2C%22patient_uid%22%2C%22debtor_uid%22]%2C%22debtor_uid%22]%2C%0A%20%20%20%20%22uid%22%2C%0A%20%20%20%20%22entity_uid%22%2C%0A%20%20%20%20%22diary_uid%22%2C%0A%20%20%20%20%22booking_type_uid%22%2C%0A%20%20%20%20%22booking_status_uid%22%2C%0A%20%20%20%20%22patient_uid%22%2C%0A%20%20%20%20%22start_time%22%2C%0A%20%20%20%20%22duration%22%2C%0A%20%20%20%20%22treating_doctor_uid%22%2C%0A%20%20%20%20%22reason%22%2C%0A%20%20%20%20%22invoice_nr%22%2C%0A%20%20%20%20%22cancelled%22%2C%0A%20%20%20%20%22uuid%22%0A]&filter=[%0A%20%20%20%20%20%20%20%20%22%3D%22%2C%0A%20%20%20%20%20%20%20%20[%22I%22%2C%22uid%22]%2C%0A%20%20%20%20%20%20%20%20[%22L%22%2C' . $booking_uid . ']%0A%20%20%20%20]',
+		CURLOPT_SSL_VERIFYPEER => false,
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_ENCODING => '',
+		CURLOPT_MAXREDIRS => 10,
+		CURLOPT_TIMEOUT => 0,
+		CURLOPT_FOLLOWLOCATION => true,
+		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		CURLOPT_CUSTOMREQUEST => 'GET',
+		CURLOPT_HTTPHEADER => array(
+			'Cookie: session_id="\\"8d0fa9cc-591c-481d-bf78-6608fedee7e4\\"_applicant_001"'
+		),
 	));
 
 	$response = curl_exec($curl);
@@ -171,7 +254,7 @@ function get_debtors()
 	return $response;
 }
 
-function create_booking($entity_uid, $diary_uid, $booking_type_uid, $booking_status_uid, $start_time, $duration, $patient_uid, $reason, $cancelled)
+function create_booking_old($entity_uid, $diary_uid, $booking_type_uid, $booking_status_uid, $start_time, $duration, $patient_uid, $reason, $cancelled)
 {
 	$url = 'https://dev_interview.qagoodx.co.za/api/booking';
 	$post_array['model'] = array('entity_uid' => $entity_uid, 'diary_uid' => $diary_uid, 'booking_type_uid' => $booking_type_uid, 'booking_status_uid' => $booking_status_uid, 'start_time' => $start_time, 'duration' => $duration, 'patient_uid' => $patient_uid, 'reason' => $reason, 'cancelled' => $cancelled);
@@ -184,69 +267,118 @@ function create_booking($entity_uid, $diary_uid, $booking_type_uid, $booking_sta
 	return $result;
 }
 
-function post_api_call($url, $data)
+function create_booking($entity_uid, $diary_uid, $booking_type_uid, $booking_status_uid, $start_time, $duration, $patient_uid, $reason, $cancelled)
 {
-	/* API URL */
-	// $url = 'https://opentdb.com/api.php?amount=10&category=9&difficulty=easy';
+	$curl = curl_init();
 
-	/* Init cURL resource */
-	$ch = curl_init($url);
+	curl_setopt_array($curl, array(
+		CURLOPT_URL => 'https://dev_interview.qagoodx.co.za/api/booking',
+		CURLOPT_SSL_VERIFYPEER => false,
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_ENCODING => '',
+		CURLOPT_MAXREDIRS => 10,
+		CURLOPT_TIMEOUT => 0,
+		CURLOPT_FOLLOWLOCATION => true,
+		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		CURLOPT_CUSTOMREQUEST => 'POST',
+		CURLOPT_POSTFIELDS =>'{
+			"model": 
+			{
+				"entity_uid": ' . $entity_uid . ', 
+				"diary_uid": ' . $diary_uid . ', 
+				"booking_type_uid": ' . $booking_type_uid . ', 
+				"booking_status_uid": ' . $booking_status_uid . ', 
+				"start_time": "' . $start_time . '", 
+				"duration": ' . $duration . ', 
+				"patient_uid": ' . $patient_uid . ', 
+				"reason": "' . $reason . '", 
+				"cancelled": false 
+			}
+		}',
+		CURLOPT_HTTPHEADER => array(
+			'Content-Type: application/json',
+			'Cookie: session_id="\\"8d0fa9cc-591c-481d-bf78-6608fedee7e4\\"_applicant_001"'
+		),
+		));
 
-	/* pass encoded JSON string to the POST fields */
-	curl_setopt($ch,CURLOPT_COOKIE, 'session_id="\"109cca73-4090-40f6-ac1f-45d9104fc512\"_applicant_001"');
+		$response = curl_exec($curl);
 
-	curl_setopt ( $ch, CURLOPT_POST, 1 );
+		curl_close($curl);
 
-	/* pass encoded JSON string to the POST fields */
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-	
-	/* set the content type json */
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-
-	/* handle https/ssl */
-	curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-	/* set return type json */
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	
-	/* execute request */
-	$result = curl_exec($ch);
-			
-	curl_close($ch);
-
-	return $result;
+		echo $response;
 }
 
-// function get_api_call($api_call)
-// {
-// 	/* Init cURL resource */
-// 	$ch = curl_init($api_call);
-
-// 	/* pass encoded JSON string to the POST fields */
-// 	curl_setopt($ch,CURLOPT_COOKIE, 'session_id="\"8d0fa9cc-591c-481d-bf78-6608fedee7e4\"_applicant_001"');
-	
-// 	/* set the content type json */
-// 	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-
-// 	/* handle https/ssl */
-// 	curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-// 	/* set return type json */
-// 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	
-// 	/* execute request */
-// 	$result = curl_exec($ch);
-			
-// 	/* output errors */
-// 	// echo 'Curl error: ' . curl_error($ch); 
-
-// 	curl_close($ch);
-
-// 	return $result;
-// }
-
-function test($arg)
+function update_booking($booking_uid, $start_time, $duration, $patient_uid, $reason)
 {
-	return "Yo mama is so... " . $arg;
+	$curl = curl_init();
+
+	// echo "AAA: $booking_uid, $start_time, $duration, $patient_uid, $reason";
+
+	curl_setopt_array($curl, array(
+		CURLOPT_URL => 'https://dev_interview.qagoodx.co.za/api/booking/' . $booking_uid,
+		CURLOPT_SSL_VERIFYPEER => false,
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_ENCODING => '',
+		CURLOPT_MAXREDIRS => 10,
+		CURLOPT_TIMEOUT => 0,
+		CURLOPT_FOLLOWLOCATION => true,
+		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		CURLOPT_CUSTOMREQUEST => 'PUT',
+		CURLOPT_POSTFIELDS =>'{
+			"model": 
+			{
+				"uid": ' . $booking_uid . ', 
+				"start_time": "' . $start_time . '", 
+				"duration": ' . $duration . ', 
+				"patient_uid": ' . $patient_uid . ', 
+				"reason": "' . $reason . '", 
+				"cancelled": false 
+			}
+		}',
+		CURLOPT_HTTPHEADER => array(
+			'Content-Type: application/json',
+			'Cookie: session_id="\\"8d0fa9cc-591c-481d-bf78-6608fedee7e4\\"_applicant_001"'
+		),
+	));
+
+	$response = curl_exec($curl);
+
+	curl_close($curl);
+
+	return $response;
+}
+
+function delete_booking($booking_uid)
+{
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+		CURLOPT_URL => 'https://dev_interview.qagoodx.co.za/api/booking/' . $booking_uid,
+		CURLOPT_SSL_VERIFYPEER => false,
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_ENCODING => '',
+		CURLOPT_MAXREDIRS => 10,
+		CURLOPT_TIMEOUT => 0,
+		CURLOPT_FOLLOWLOCATION => true,
+		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		CURLOPT_CUSTOMREQUEST => 'PUT',
+		CURLOPT_POSTFIELDS =>'{
+			"model": 
+			{
+				"uid": ' . $booking_uid . ', 
+				"cancelled": true 
+			}
+		}',
+		CURLOPT_HTTPHEADER => array(
+			'Content-Type: application/json',
+			'Cookie: session_id="\\"8d0fa9cc-591c-481d-bf78-6608fedee7e4\\"_applicant_001"'
+		),
+	));
+
+	$response = curl_exec($curl);
+
+	curl_close($curl);
+
+	return $response;
 }
 ?>

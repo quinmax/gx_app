@@ -10,7 +10,6 @@
 	grid-template-rows: 85px 1fr;
 	width: 100%;
 	height: 100%;
-	
 }
 .main_content {
 	padding: 20px 40px;
@@ -115,6 +114,13 @@
 	color: white;
 	border-radius: 4px;
 	opacity: 0.8;
+}
+.datagrid_wrapper .data_row {
+	display: contents;
+	cursor: pointer;
+}
+.datagrid_wrapper .data_row:hover > div {
+	background-color: #d9d9d9;
 }
 .datagrid_wrapper .cell {
 	display: flex;
@@ -237,6 +243,17 @@
 	padding: 5px 20px;
 	cursor: pointer;
 }
+.form_five_columns .btn_on {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--app-secondary);
+	border: 1px solid var(--app-border);
+	color: white;
+	border-radius: 5px;
+	padding: 5px 20px;
+	cursor: pointer;
+}
 
 .form_one_column {
 	display: grid;
@@ -266,6 +283,42 @@
 	border-radius: 5px;
 	padding: 5px 20px;
 	cursor: pointer;
+}
+.form_four_columns .btn_on {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	/* width: 50px; */
+	background-color: var(--app-secondary);
+	border: 1px solid var(--app-border);
+	color: white;
+	border-radius: 5px;
+	padding: 5px 20px;
+	cursor: pointer;
+}
+.form_four_columns .btn_disabled {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	/* width: 50px; */
+	background-color: white;
+	border: 1px solid var(--app-border);
+	color: black;
+	border-radius: 5px;
+	padding: 5px 20px;
+	pointer-events: none;
+}
+.form_four_columns .btn_disabled_on {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	/* width: 50px; */
+	background-color: var(--app-secondary);
+	border: 1px solid var(--app-border);
+	color: white;
+	border-radius: 5px;
+	padding: 5px 20px;
+	pointer-events: none;
 }
 .form_button_bar {
 	display: grid;
@@ -370,6 +423,31 @@
 	cursor: pointer;
 	opacity: 0.7;
 }
+
+
+/* Cancelled states
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.is_cancelled {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 15px;
+	background: var(--app-border);
+	color: black;
+}
+.not_cancelled {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 15px;
+	background: var(--app-secondary);
+	color: white;
+}
+
 
 /* Login
 –––––––––––––––––––––––––––––––––––––––––––––––––– */

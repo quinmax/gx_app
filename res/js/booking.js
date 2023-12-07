@@ -118,14 +118,18 @@ const booking =
         .then(result => { this.setForm(result, 1); });
     },
 
-	getEdit: function()
+	getEdit: function(bookingUid)
     {
-        let formData = { };
+        let formData = { "booking_uid": bookingUid };
 		
         let phpUrl = baseUrl + "booking/edit";
         
         sendData(phpUrl, formData)
-        .then(result => { this.setForm(result, 2); });
+        .then(result => 
+		{ 
+			// console.log('Edit Resp: ' + result);
+			this.setForm(result, 2); 
+		});
     },
 
 	setForm: function(ajaxData, mode)
@@ -163,10 +167,12 @@ const booking =
 				}
             }
         }
-
-		this.clearTimeSlots();
-		this.clearDuration();
-		this.clearType();
+		if (mode == 1)
+		{
+			this.clearTimeSlots();
+			this.clearDuration();
+			this.clearType();
+		}
     },
 
 	setReason()
@@ -210,15 +216,15 @@ const booking =
 		const entityUid = this.getCookie("entity_uid");
 		const diaryUid = this.getCookie("diary_uid");
 		// Type
-		const bookingTypeUid = this.bookingType;
+		const bookingTypeUid = document.getElementById("set_type").value;
 		// Status
 		const bookingStatusUid = 1;
 		// Start time
 		const getBookingDate = document.getElementById("booking_date").value;
-		const getBookingTime = this.startTime;
+		const getBookingTime = document.getElementById("set_time").value;
 		const start_time = getBookingDate + "T" + getBookingTime;
 		// Duration
-		const duration = this.duration;
+		const duration = document.getElementById("set_duration").value;
 		// Patient uid
 		let selectedPatient = patient.value;
 		let bits = selectedPatient.split("@@");
@@ -235,6 +241,7 @@ const booking =
 		.then(result => 
 		{ 
 			spinner();
+			//console.log('RESP: ' + result);
 			response = JSON.parse(result);
 			
 			if (response.status == "OK")
@@ -251,12 +258,73 @@ const booking =
 		// console.log('Entity uis: ' + entityUid + " Diary uid " + diaryUid + " Type " + bookingTypeUid + " status " + bookingStatusUid + " start time " + start_time + " duration " + duration + "patient uid " + patientUid + "reason " + reason + " cancelled " + cancelled );
 	},
 
+	editValidate()
+	{
+		let errCtr = 0;
+
+		errCtr = validate.bookingDate(errCtr);
+		errCtr = validate.patient(errCtr);
+		errCtr = validate.reason(errCtr);
+
+		if (errCtr == 0)
+		{
+			this.update();
+		}
+	},
+
 	update()
 	{
 		console.log('Update Form');
+		const bookingUid = document.getElementById("booking_uid").value;
+
+		// Start time
+		const getBookingDate = document.getElementById("booking_date").value;
+		const getBookingTime = document.getElementById("set_time").value;
+		const start_time = getBookingDate + "T" + getBookingTime;
+
+		// Duration
+
+		const duration = document.getElementById("set_duration").value;
+
+		// Patient uid
+		let selectedPatient = patient.value;
+		let bits = selectedPatient.split("@@");
+		const patientUid = bits[1];
+
+		// Reason
+		const reason = document.getElementById("reason").value;
+
+		let phpUrl = baseUrl + "booking/update_booking";
+		let formData = { 'booking_uid': bookingUid, "start_time": start_time, "duration": duration, "patient_uid": patientUid, "reason": reason, "cancelled": false };
+			
+		sendData(phpUrl, formData)
+		.then(result => 
+		{ 
+			spinner();
+			console.log('RESP: ' + result);
+			response = JSON.parse(result);
+			
+			if (response.status == "OK")
+			{
+				closeForm();
+				router.booking_list();
+			} 
+			else 
+			{
+				console.log('There was an error');
+			}
+		});
+		// {
+		// 	"uid": {{booking_uid}}, // UID for the booking to be updated
+		// 	"start_time": "{{date_string}}T09:00:00", //You can put a different time here to update the booking time/date
+		// 	"duration": 50, //You can put a different time here to update the booking duration
+		// 	"patient_uid": {{patient_uid}}, //You can put a different patient here to update the booking's patient
+		// 	"reason": "This is now an updated booking example", // You can set an updated reason here
+		// 	"cancelled": false //You can change this to true, to cancel/delete the booking
+		// }
 	},
 
-	deleteBooking()
+	deleteBooking(bookingUid)
 	{
 		DayPilot.Modal.confirm("Are you sure you want to delete this booking ?", { theme: "modal_flat" })
         .then(function(args) 
@@ -265,14 +333,24 @@ const booking =
             {
                 spinner();
 
-                let formData = { "loc_id": loc_id };
-                let phpUrl = baseUrl + "manage_locations/delete";
+                let formData = { "booking_uid": bookingUid };
+                let phpUrl = baseUrl + "booking/delete_booking";
     
-            sendData(phpUrl, formData)
-            .then(result => 
-            {
-                setTimeout( function() { spinner(); ROUTER.manage_locations(); },  sysMsgDelay);
-            });
+				sendData(phpUrl, formData)
+				.then(result => 
+				{
+					spinner();
+					response = JSON.parse(result);
+
+					if (response.status == "OK")
+					{
+						router.booking_list();
+					} 
+					else 
+					{
+						console.log('There was an error');
+					}
+				});
             }
             else 
             {
@@ -300,7 +378,8 @@ const booking =
 	{
 		this.clearTimeSlots();
 
-		const timeSlot = document.getElementById("ts_" + id);
+		let setTime = document.getElementById("set_time");
+		let timeSlot = document.getElementById("ts_" + id);
 
 		timeSlot.style.backgroundColor = "var(--app-secondary)";
 		timeSlot.style.color = "white";
@@ -308,34 +387,34 @@ const booking =
 		switch (id)
 		{
 			case 1:
-				this.startTime = "08:00";
+				setTime.value = "08:00:00";
 			break;
 			case 2:
-				this.startTime = "09:00";
+				setTime.value = "09:00:00";
 			break;
 			case 3:
-				this.startTime = "10:00";
+				setTime.value = "10:00:00";
 			break;
 			case 4:
-				this.startTime = "11:00";
+				setTime.value = "11:00:00";
 			break;
 			case 5:
-				this.startTime = "12:00";
+				setTime.value = "12:00:00";
 			break;
 			case 6:
-				this.startTime = "13:00";
+				setTime.value = "13:00:00";
 			break;
 			case 7:
-				this.startTime = "14:00";
+				setTime.value = "14:00:00";
 			break;
 			case 8:
-				this.startTime = "15:00";
+				setTime.value = "15:00:00";
 			break;
 			case 9:
-				this.startTime = "16:00";
+				setTime.value = "16:00:00";
 			break;
 			case 10:
-				this.startTime = "17:00";
+				setTime.value = "17:00:00";
 			break;
 		}
 		
@@ -358,7 +437,8 @@ const booking =
 	{
 		this.clearDuration();
 
-		const timeSlot = document.getElementById("dr_" + id);
+		let setDuration = document.getElementById("set_duration");
+		let timeSlot = document.getElementById("dr_" + id);
 
 		timeSlot.style.backgroundColor = "var(--app-secondary)";
 		timeSlot.style.color = "white";
@@ -366,18 +446,19 @@ const booking =
 		switch (id)
 		{
 			case 1:
-				this.duration = "15";
+				setDuration.value = "15";
 			break;
 			case 2:
-				this.duration = "30";
+				setDuration.value = "30";
 			break;
 			case 3:
-				this.duration = "45";
+				setDuration.value = "45";
 			break;
 			case 4:
-				this.duration = "60";
+				setDuration.value = "60";
 			break;
 		}
+		
 	},
 
 	clearDuration()
@@ -397,7 +478,8 @@ const booking =
 	{
 		this.clearType();
 
-		const timeSlot = document.getElementById("bt_" + id);
+		let setType = document.getElementById("set_type");
+		let timeSlot = document.getElementById("bt_" + id);
 
 		timeSlot.style.backgroundColor = "var(--app-secondary)";
 		timeSlot.style.color = "white";
@@ -405,16 +487,16 @@ const booking =
 		switch (id)
 		{
 			case 1:
-				this.bookingType = 1;
+				setType.value = 1;
 			break;
 			case 2:
-				this.bookingType = 2;
+				setType.value = 2;
 			break;
 			case 3:
-				this.bookingType = 3;
+				setType.value = 3;
 			break;
 			case 4:
-				this.bookingType = 4;
+				setType.value = 4;
 			break;
 		}
 	},

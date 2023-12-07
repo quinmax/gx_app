@@ -164,4 +164,32 @@ class Bridge extends CI_Controller
         return $output;
 	}
 	
+
+	// function get_api_call($api_call)
+// {
+// 	/* Init cURL resource */
+// 	$ch = curl_init($api_call);
+
+// 	/* pass encoded JSON string to the POST fields */
+// 	curl_setopt($ch,CURLOPT_COOKIE, 'session_id="\"8d0fa9cc-591c-481d-bf78-6608fedee7e4\"_applicant_001"');
+	
+// 	/* set the content type json */
+// 	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+
+// 	/* handle https/ssl */
+// 	curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+// 	/* set return type json */
+// 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	
+// 	/* execute request */
+// 	$result = curl_exec($ch);
+			
+// 	/* output errors */
+// 	// echo 'Curl error: ' . curl_error($ch); 
+
+// 	curl_close($ch);
+
+// 	return $result;
+// }
 }

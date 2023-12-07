@@ -1,10 +1,9 @@
 const diary = 
 {
-	selectDiary(id)
+	selectDiary(id, diaryName)
 	{
-		console.log('Diary Id: ' + id);
-
 		this.setCookie('diary_uid', id, 1);
+		this.setCookie('diary_name', diaryName, 1);
 
 		router.booking_list();
 	},

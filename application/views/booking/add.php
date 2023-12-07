@@ -115,7 +115,11 @@
 		
 		<!-- Form buttons: 4 columns (1fr auto auto 1fr) -->
 		<div class="form_button_bar mt_lrg">
-			<div>&nbsp;</div>
+			<div>
+				<?php echo form_input('set_time', '', 'id="set_time" style="display: none"'); ?>
+				<?php echo form_input('set_duration', '', 'id="set_duration" style="display: none"'); ?>
+				<?php echo form_input('set_type', '', 'id="set_type" style="display: none"'); ?>
+			</div>
 			<div class="action_button" onclick="booking.addValidate()">Save</div>
 			<div class="action_button" onclick="closeForm()">Close</div>
 			<div>&nbsp;</div>
