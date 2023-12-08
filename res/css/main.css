@@ -166,6 +166,7 @@
 	grid-template-columns: 1fr 1fr 1fr;
 	column-gap: 40px;
 	max-width: 800px;
+	width: 100%;
 }
 .form_view_container .view_group {
 	display: flex;
