@@ -63,3 +63,10 @@ Booking Type
 PHP Retrieve cookie:
 $cookie = $_COOKIE["uid"];
 echo "COOKIE: " . $cookie;
+
+JUnit
+https://snyk.io/blog/how-to-write-unit-test-in-javascript/
+https://www.testim.io/blog/mocha-assertions/
+
+Mocha install: npm install -D mocha
+Mocha JSDom :npm i --save-dev mocha-jsdom

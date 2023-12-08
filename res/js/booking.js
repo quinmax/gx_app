@@ -560,5 +560,44 @@ const booking =
 		}
 
 		
+	},
+
+	// Unit testing examples
+	addNumbers(a, b)
+	{
+		return a + b;
+	},
+
+	subtractNumbers(a, b)
+	{
+		return a - b;
+	},
+
+	showDate(dateItem)
+	{
+		const d = new Date();
+		let result = 'Invalid date type given';
+
+		switch(dateItem)
+		{
+			case 0:
+				result = d.getDate();
+			break;
+			case 1:
+				result = d.getDay();
+			break;
+			case 2:
+				result = d.getFullYear();
+			break;
+			case 3:
+				result = d;
+			break;
+		}
+
+		return result;
 	}
+
+
 }
+
+module.exports = booking;

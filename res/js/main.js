@@ -98,4 +98,3 @@ function closeViewForm()
 }
 
 init();
-
