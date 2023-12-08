@@ -11,8 +11,23 @@ class Booking extends CI_Controller
 		 */
 		$data = array();
 
+		// Get booking filter date
+		$booking_filter_date = $this->session->userdata('booking_filter_date');
+		$today = date("Y-m-d");
+		if ($booking_filter_date == $today)
+		{
+			$title = "Bookings";
+		} 
+		else 
+		{
+			$title = "Bookings <span style='font-size: 1.4rem'>(Filtered)</span>";
+		}
+
+		$data['title'] = $title;
+		$data['booking_filter_date'] = $booking_filter_date;
+
 		// Bookings
-		$data['records'] = $this->api_get_bookings();
+		$data['records'] = $this->api_get_bookings($booking_filter_date);
 
 		// Booking status [id, name]
 		$data['booking_status'] = $this->api_get_booking_status(-1, -1);
@@ -34,9 +49,33 @@ class Booking extends CI_Controller
 		$this->load->view('includes/template' , $data);
 	}
 
-	public function view($booking_uid)
+	public function set_filter()
+	{
+		$ajax_data = file_get_contents("php://input");
+        $json_data = json_decode($ajax_data);
+
+        $booking_filter_date = $json_data->booking_filter_date;
+		$this->session->set_userdata('booking_filter_date', $booking_filter_date);
+
+		echo "OK";
+	}
+
+	public function view()
 	{
 		$data = array();
+
+		$ajax_data = file_get_contents("php://input");
+        $json_data = json_decode($ajax_data);
+
+        $booking_uid = $json_data->booking_uid;
+
+        // Get booking record
+		$result = $this->api_get_edit_booking($booking_uid);
+
+		$data['view_record'] = $result[0];
+		$data['diary_name'] = $_COOKIE["diary_name"];
+		$data['booking_status'] = array("Not set", "Booked", "Arrived", "Ready", "Treated", "Done");
+		$data['booking_types'] = array("Not set", "Consultation", "Follow Up", "Meeting", "Out of office");
 
 		$this->load->view('booking/view' , $data);
 	}
@@ -275,10 +314,10 @@ class Booking extends CI_Controller
 		echo $title . ' ' . $initials . ' ' . $name . ' ' . $surname;
 	}
 
-	private function api_get_bookings()
+	private function api_get_bookings($booking_filter_date)
 	{
-		$today = date("Y-m-d");
-		$response = get_bookings($today);
+		// $today = date("Y-m-d");
+		$response = get_bookings($booking_filter_date);
 
 		$json = json_decode($response);
 		$records = $json->data;

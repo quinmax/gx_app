@@ -25,6 +25,10 @@ class Login extends CI_Controller {
 
 		$response = login($san_cred_1, $san_cred_2);
 
+		// Set the default booking filter date
+		$today = date("Y-m-d");
+		$this->session->set_userdata('booking_filter_date', $today);
+
 		echo $response;
 	}
 }

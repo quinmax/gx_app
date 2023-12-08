@@ -74,11 +74,12 @@
 }
 
 
-/* Data grid
+/* Data bar
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .data_bar {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr auto auto;
+	column-gap: 15px;
 	width: 100%;
 }
 .data_bar .title {	
@@ -89,7 +90,8 @@
 .data_bar .actions {
 	display: flex;
 	align-items: center;
-	justify-content: end;	
+	justify-content: end;
+	column-gap: 10px;
 }
 
 
@@ -109,7 +111,7 @@
 	background-color: var(--app-secondary);
 	padding: 5px 8px;
 	/* text-transform: uppercase; */
-	font-size: 1.4rem;
+	font-size: 1.3rem;
 	font-weight: bold;
 	color: white;
 	border-radius: 4px;
@@ -128,7 +130,7 @@
 	height: 30px;
 	padding: 5px 8px;
 	border-bottom: 1px solid var(--app-border);
-	font-size: 1.4rem;
+	font-size: 1.3rem;
 }
 .datagrid_wrapper .center {
 	display: flex;
@@ -340,7 +342,6 @@
 }
 
 
-
 /* Common
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .mt_sml {
@@ -369,6 +370,15 @@
 }
 .mr_lrg {
 	margin-right: 25px;
+}
+.pl_sml {
+	padding-left: 5px;
+}
+.pl_med {
+	padding-left: 15px;
+}
+.pl_lrg {
+	padding-left: 25px;
 }
 .pr_sml {
 	padding-right: 5px;
@@ -424,6 +434,15 @@
 	opacity: 0.7;
 }
 
+.view_btn {
+	padding: 8px 20px;
+	border-radius: 8px;
+	background-color: white;
+	border: 1px solid var(--app-secondary);
+	color: black;
+	cursor: pointer;
+}
+
 
 /* Cancelled states
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -431,9 +450,9 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 30px;
-	height: 30px;
-	border-radius: 15px;
+	width: 28px;
+	height: 28px;
+	border-radius: 14px;
 	background: var(--app-border);
 	color: black;
 }
@@ -441,9 +460,9 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 30px;
-	height: 30px;
-	border-radius: 15px;
+	width: 28px;
+	height: 28px;
+	border-radius: 14px;
 	background: var(--app-secondary);
 	color: white;
 }

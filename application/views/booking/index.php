@@ -9,16 +9,24 @@ $reports = array('0' => 'Please select...', '1' => 'Bookings (Today)', '2' => 'B
 
 		<!-- Page bar: Entity name, Diary name and report list for this page -->
 		<div class="page_bar mb_med">
-			<div class="entity_name"><?php echo $entity_name; ?> | <?php echo $diary_name; ?></div>
-			<div class="report_container">
-				<div><i class="fa-solid fa-print fa_col_secondary pr_med"></i>Reports</div>
+			<div class="entity_name"><i class="fa-solid fa-house-medical fa_col_secondary pr_sml"></i><?php echo $entity_name; ?> | <i class="fa-solid fa-user-doctor fa_col_secondary pr_sml pl_sml"></i><?php echo $diary_name; ?></div>
+			<div class="report_container">	
+				<!-- Reports for this page -->
+				<div><i class="fa-solid fa-print fa_col_secondary pr_sml"></i>Reports</div>
 				<div><?php echo form_dropdown('a', $reports, ''); ?></div>
 			</div>
 		</div>
 
 		<!-- Bookings list data grid -->
 		<div class="data_bar">
-			<div class="title mb_sml">Bookings [Select a date]</div>
+			<div class="title mb_sml"><?php echo $title; ?></div>
+
+			<!-- Select a date -->
+			<div class="actions">
+			<div><i class="fa-solid fa-print fa_col_secondary pr_sml"></i>Select a date</div>
+			<div><?php echo form_input('booking_filter_date', $booking_filter_date, 'id="booking_filter_date" style="width: 100px;"'); ?></div>
+			</div>
+
 			<div class="actions">
 				<div class="action_button" onclick="booking.getAdd()"><i class="fa-solid fa-plus fa_col_white pr_sml"></i>Create Booking</div>
 			</div>
@@ -35,12 +43,12 @@ $reports = array('0' => 'Please select...', '1' => 'Bookings (Today)', '2' => 'B
 				<div class="col_title">Type</div>
 				<div class="col_title">Status</div>
 				<div class="col_title">Date</div>
-				<div class="col_title">Start Time</div>
+				<div class="col_title">Time</div>
 				<div class="col_title">Duration</div>
 				<div class="col_title">Patient Name</div>
 				<div class="col_title">Reason</div>
 				<div class="col_title">Debtor Name</div>
-				<div class="col_title">Cancelled</div>
+				<div class="col_title center">Cancelled</div>
 				<div class="col_title center" title="Edit this booking"><i class="fa-regular fa-pen-to-square"></i></div>
 				<div class="col_title center" title="Delete this booking"><i class="fa-regular fa-trash-can"></i></div>
 
@@ -84,13 +92,12 @@ $reports = array('0' => 'Please select...', '1' => 'Bookings (Today)', '2' => 'B
 						echo "<div class='datagrid_wrapper cell'>" . $row->patient_name . ' ' . $row->patient_surname . "</div>";
 						echo "<div class='datagrid_wrapper cell'>" . $row->reason . "</div>";
 						echo "<div class='datagrid_wrapper cell'>" . $row->debtor_name . ' ' . $row->debtor_surname . "</div>";
-						echo "<div class='datagrid_wrapper cell'>" . $cancelled . "</div>";
+						echo "<div class='datagrid_wrapper cell center'>" . $cancelled . "</div>";
 					echo "</div>";
 					echo "<div class='datagrid_wrapper cell center c_p' title='Edit this booking' onclick='booking.getEdit(`$row->uid`)'><i class='fa-regular fa-pen-to-square'></i></div>";
 					echo "<div class='datagrid_wrapper cell center c_p' title='Delete this booking' onclick='booking.deleteBooking(`$row->uid`)'><i class='fa-regular fa-trash-can'></i></div>";
 				}
 				?>
-				
 				
 			</div>
 
@@ -100,3 +107,18 @@ $reports = array('0' => 'Please select...', '1' => 'Bookings (Today)', '2' => 'B
 	</div>
 
 </div>
+
+<script>
+	const picker = new Litepicker({ element: document.getElementById('booking_filter_date') });
+	picker.on('selected', () => {
+      booking.setFilter();
+   });
+	
+
+	// const picker = new Litepicker(options);
+	// picker.updateInput = function() {
+	// 	Litepicker.prototype.updateInput.call(this);
+	// 	$(this.options.element).trigger('change');
+	// 	$(this.options.elementEnd).trigger('change');
+	// };
+</script>

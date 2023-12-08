@@ -9,7 +9,7 @@ $reports = array('0' => 'Please select...', '1' => 'All bookings (by date)', '2'
 
 		<!-- Page bar: Entity name and report list for this page -->
 		<div class="page_bar mb_med">
-		<div class="entity_name"><?php echo $entity_name; ?></div>
+		<div class="entity_name"><i class="fa-solid fa-house-medical fa_col_secondary pr_sml"></i><?php echo $entity_name; ?><?php echo $entity_name; ?></div>
 			<div class="report_container">
 				<div><i class="fa-solid fa-print fa_col_secondary pr_med"></i>Reports</div>
 				<div><?php echo form_dropdown('a', $reports, ''); ?></div>

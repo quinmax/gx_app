@@ -1,12 +1,26 @@
 const booking = 
 {
-	startTime: "",
-	duration: "",
-	bookingType: "",
+	setFilter()
+	{
+		let bookingFilterDate = document.getElementById("booking_filter_date").value;
+		
+		let formData = { "booking_filter_date": bookingFilterDate };
+		
+        let phpUrl = baseUrl + "booking/set_filter";
 
-	getView: function()
+        sendData(phpUrl, formData)
+        .then(result => 
+		{ 
+			if (result == "OK")
+			{
+				router.booking_list();
+			}
+		});
+	},
+
+	getView: function(bookingUid)
     {
-        let formData = { };
+        let formData = { "booking_uid": bookingUid };
 		
         let phpUrl = baseUrl + "booking/view";
 
@@ -314,14 +328,6 @@ const booking =
 				console.log('There was an error');
 			}
 		});
-		// {
-		// 	"uid": {{booking_uid}}, // UID for the booking to be updated
-		// 	"start_time": "{{date_string}}T09:00:00", //You can put a different time here to update the booking time/date
-		// 	"duration": 50, //You can put a different time here to update the booking duration
-		// 	"patient_uid": {{patient_uid}}, //You can put a different patient here to update the booking's patient
-		// 	"reason": "This is now an updated booking example", // You can set an updated reason here
-		// 	"cancelled": false //You can change this to true, to cancel/delete the booking
-		// }
 	},
 
 	deleteBooking(bookingUid)
