@@ -39,7 +39,7 @@ function login($cred_1, $cred_2)
 	
 	curl_close($curl);
 
-	echo $response;
+	return $response;
 }
 
 function get_diaries()

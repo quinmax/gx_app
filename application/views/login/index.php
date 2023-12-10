@@ -17,13 +17,13 @@ $img_login_logo = array('src' => base_url() . 'res/images/login_logo', 'alt' => 
 	<!-- Enter username: Label & input -->
 	<div>Username</div>
 	<div class="mt_sml">
-		<?php echo form_input('cred_1', 'applicant_001', 'id="cred_1" style="" placeholder="Enter Username"'); ?>
+		<?php echo form_input('cred_1', '', 'id="cred_1" style="" placeholder="Enter Username"'); ?>
 	</div>
 
 	<!-- Enter password: Label & input -->
 	<div class="mt_med">Password</div>
 	<div class="mt_sml">
-		<?php echo form_input('cred_2', 'app001', 'id="cred_2" style="" placeholder="Enter Password"'); ?>
+		<?php echo form_input('cred_2', '', 'id="cred_2" style="" placeholder="Enter Password"'); ?>
 	</div>
 
 	<!-- Submit login credentials -->
