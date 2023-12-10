@@ -2,49 +2,75 @@ const booking =
 {
 	setFilter()
 	{
+		// Get booking date from document
 		let bookingFilterDate = document.getElementById("booking_filter_date").value;
-		
+
+		// Set async data
 		let formData = { "booking_filter_date": bookingFilterDate };
-		
         let phpUrl = baseUrl + "booking/set_filter";
 
+		// Start spinner
+		spinner();
+
+		// Do async
         sendData(phpUrl, formData)
         .then(result => 
 		{ 
 			if (result == "OK")
 			{
+				// Display booking list
 				router.booking_list();
+			} 
+			else
+			{
+				console.log('No records found');
 			}
 		});
 	},
 
 	getView: function(bookingUid)
     {
+		// Set async data
         let formData = { "booking_uid": bookingUid };
-		
         let phpUrl = baseUrl + "booking/view";
 
+		//Start spinner
+		spinner();
+		
+		// Do async
         sendData(phpUrl, formData)
-        .then(result => { this.setBookingView(result, 0); });
+        .then(result => 
+		{ 
+			// Stop spinner
+			spinner();
+			
+			// Display the view
+			this.setBookingView(result, 0); 
+		});
     },
 
 	setBookingView: function(ajaxData)
     {
+		// Show hidden div
         showFormOverlay();
         
+		// Set and inject returned view data
         let formOverlay = document.getElementById("form_overlay");
         formOverlay.innerHTML = "";
         formOverlay.innerHTML = ajaxData;
 
+		// Handle keyboard events
         document.onkeydown=function(evt)
 		{
             var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
             if(keyCode == 27)
             {
+				// Hide div
                 closeForm();
             }
             if(keyCode == 13)
             {
+				// Hide div
 				closeForm();
             }
         }
@@ -52,62 +78,70 @@ const booking =
 
 	getViewDebtorGeneral: function()
     {
+		// Set async data
         let formData = { };
-		
         let phpUrl = baseUrl + "booking/view_debtor_general";
         
+		// Do async and display the view
         sendData(phpUrl, formData)
         .then(result => { this.setViewInfo(result, 0); });
     },
 
 	getViewDebtorPatients: function()
     {
+		// Set async data
         let formData = { };
-		
         let phpUrl = baseUrl + "booking/view_debtor_patients";
         
+		// Do async and display the view
         sendData(phpUrl, formData)
         .then(result => { this.setViewInfo(result, 0); });
     },
 
 	getViewDebtorDoctorHistory: function()
     {
+		// Set async data
         let formData = { };
-		
         let phpUrl = baseUrl + "booking/view_debtor_doctor_history";
         
+		// Do async and display the view
         sendData(phpUrl, formData)
         .then(result => { this.setViewInfo(result, 0); });
     },
 
 	getViewPatientHistory: function()
     {
+		// Set async data
         let formData = { };
-		
         let phpUrl = baseUrl + "booking/view_debtor_patient_history";
         
+		// Do async and display the view
         sendData(phpUrl, formData)
         .then(result => { this.setViewInfo(result, 0); });
     },
 
 	getViewPatientGeneral: function()
     {
+		// Set async data
         let formData = { };
-		
         let phpUrl = baseUrl + "booking/view_patient_general";
         
+		// Do async and display the view
         sendData(phpUrl, formData)
         .then(result => { this.setViewInfo(result, 0); });
     },
 
 	setViewInfo: function(ajaxData,)
     {
+		// Show hidden div
         showViewOverlay();
         
+		// Set and inject returned view data
         let viewOverlay = document.getElementById("view_overlay");
         viewOverlay.innerHTML = "";
         viewOverlay.innerHTML = ajaxData;
 
+		// Handle keyboard events
         document.onkeydown=function(evt)
 		{
             var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
@@ -124,45 +158,68 @@ const booking =
 
 	getAdd: function()
     {
+		// Set async data
         let formData = { };
-		
         let phpUrl = baseUrl + "booking/add";
+
+		// Start spinner
+		spinner();
         
+		// Do async and display the view
         sendData(phpUrl, formData)
-        .then(result => { this.setForm(result, 1); });
+        .then(result => 
+		{ 
+			// Stop spinner
+			spinner();
+
+			// Display the view
+			this.setForm(result, 1); 
+		});
     },
 
 	getEdit: function(bookingUid)
     {
+		// Set async data
         let formData = { "booking_uid": bookingUid };
-		
         let phpUrl = baseUrl + "booking/edit";
+
+		// Start spinner
+		spinner();
         
+		// Do async and display the view
         sendData(phpUrl, formData)
         .then(result => 
 		{ 
-			// console.log('Edit Resp: ' + result);
+			// Stop spinner
+			spinner();
+			
+			// Display the view
 			this.setForm(result, 2); 
 		});
     },
 
 	setForm: function(ajaxData, mode)
     {
+		// Show hidden div
         showFormOverlay();
         
+		// Set and inject returned view data
         let formOverlay = document.getElementById("form_overlay");
         formOverlay.innerHTML = "";
         formOverlay.innerHTML = ajaxData;
 
+		// Initialise date picker
 		let startPicker = new Litepicker({ 
             element: document.getElementById('booking_date')
         });
 
+		// Handle keyboard events 
         document.onkeydown=function(evt)
 		{
             var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
             if(keyCode == 27)
             {
+				// Hide div
                 closeForm();
             }
             if(keyCode == 13)
@@ -170,17 +227,22 @@ const booking =
 				switch (mode)
 				{
 					case 0:
+						// Hide div
 						closeForm();
 					break;
 					case 1:
+						// Enter key was pressed on add form
 						booking.save();
 					break;
 					case 2:
+						// Enter key was pressed on edit form
 						booking.update();
 					break;
 				}
             }
         }
+
+		// Reset form if it is an add form
 		if (mode == 1)
 		{
 			this.clearTimeSlots();
@@ -191,9 +253,12 @@ const booking =
 
 	setReason()
 	{
+		// Used to set the reason from the item selected in the dropdown. If please select is choosen the reason is cleared
+
 		let reason = document.getElementById("reason");
 		let reason_select = document.getElementById("reason_select");
 
+		// Get text of reason dropdown
 		let selected = reason_select.options[reason_select.selectedIndex].text;
 		
 		if (selected != 'Please select...')
@@ -208,6 +273,8 @@ const booking =
 
 	addValidate()
 	{
+		// Validation for the add form
+
 		let errCtr = 0;
 
 		errCtr = validate.bookingDate(errCtr);
@@ -225,8 +292,6 @@ const booking =
 
 	save()
 	{
-		spinner();
-
 		const entityUid = this.getCookie("entity_uid");
 		const diaryUid = this.getCookie("diary_uid");
 		// Type
@@ -248,19 +313,27 @@ const booking =
 		// Cancelled
 		const cancelled = false;
 
+		// Set async data
 		let phpUrl = baseUrl + "booking/save_booking";
 		let formData = { 'entity_uid': entityUid, "diary_uid": diaryUid, "booking_type_uid": bookingTypeUid, "booking_status_uid": bookingStatusUid, "start_time": start_time, "duration": duration, "patient_uid": patientUid, "reason": reason, "cancelled": cancelled };
-			
+		
+		// Start spinner
+		spinner();
+
+		// Do async
 		sendData(phpUrl, formData)
 		.then(result => 
 		{ 
+			// Stop spinner
 			spinner();
-			//console.log('RESP: ' + result);
+			
 			response = JSON.parse(result);
 			
 			if (response.status == "OK")
 			{
+				// Hide div
 				closeForm();
+				// Return to booking list
 				router.booking_list();
 			} 
 			else 
@@ -268,12 +341,12 @@ const booking =
 				console.log('There was an error');
 			}
 		});
-		
-		// console.log('Entity uis: ' + entityUid + " Diary uid " + diaryUid + " Type " + bookingTypeUid + " status " + bookingStatusUid + " start time " + start_time + " duration " + duration + "patient uid " + patientUid + "reason " + reason + " cancelled " + cancelled );
 	},
 
 	editValidate()
 	{
+		// Validation for the edit form
+
 		let errCtr = 0;
 
 		errCtr = validate.bookingDate(errCtr);
@@ -288,7 +361,7 @@ const booking =
 
 	update()
 	{
-		console.log('Update Form');
+		// Get booking id of record being updated
 		const bookingUid = document.getElementById("booking_uid").value;
 
 		// Start time
@@ -308,19 +381,27 @@ const booking =
 		// Reason
 		const reason = document.getElementById("reason").value;
 
+		// Set async data
 		let phpUrl = baseUrl + "booking/update_booking";
 		let formData = { 'booking_uid': bookingUid, "start_time": start_time, "duration": duration, "patient_uid": patientUid, "reason": reason, "cancelled": false };
 			
+		// Start spinner
+		spinner();
+
+		// Do async
 		sendData(phpUrl, formData)
 		.then(result => 
 		{ 
+			// Stop spinner
 			spinner();
-			console.log('RESP: ' + result);
+			
 			response = JSON.parse(result);
 			
 			if (response.status == "OK")
 			{
+				// Hide div
 				closeForm();
+				// return to bookling list
 				router.booking_list();
 			} 
 			else 
@@ -332,24 +413,31 @@ const booking =
 
 	deleteBooking(bookingUid)
 	{
+		// 3rd Party library to show popup/alert messages
 		DayPilot.Modal.confirm("Are you sure you want to delete this booking ?", { theme: "modal_flat" })
         .then(function(args) 
         {
             if (args.result) 
             {
+				// Start spinner
                 spinner();
 
+				// Set async data
                 let formData = { "booking_uid": bookingUid };
                 let phpUrl = baseUrl + "booking/delete_booking";
     
+				// Do async
 				sendData(phpUrl, formData)
 				.then(result => 
 				{
+					// Stop spinner 
 					spinner();
+
 					response = JSON.parse(result);
 
 					if (response.status == "OK")
 					{
+						// return to booking list
 						router.booking_list();
 					} 
 					else 
@@ -382,6 +470,9 @@ const booking =
 
 	selectTimeSlot(id)
 	{
+		// Function is to select 1 time button at a time
+		
+		// Set all to off first
 		this.clearTimeSlots();
 
 		let setTime = document.getElementById("set_time");
@@ -428,6 +519,8 @@ const booking =
 
 	clearTimeSlots()
 	{
+		// Function is to set all time buttons off
+
 		const timeSlots = [ "ts_1", "ts_2", "ts_3", "ts_4", "ts_5", "ts_6", "ts_7", "ts_8", "ts_9", "ts_10" ];
 
 		timeSlots.forEach((tsName) => 
@@ -441,6 +534,9 @@ const booking =
 
 	selectDuration(id)
 	{
+		// Function is to select 1 duration button at a time
+
+		// Set all to off first
 		this.clearDuration();
 
 		let setDuration = document.getElementById("set_duration");
@@ -469,6 +565,8 @@ const booking =
 
 	clearDuration()
 	{
+		// Function is to set all duration buttons off
+
 		const timeSlots = [ "dr_1", "dr_2", "dr_3", "dr_4" ];
 
 		timeSlots.forEach((tsName) => 
@@ -482,6 +580,9 @@ const booking =
 
 	selectType(id)
 	{
+		// Function is to select 1 booking type button at a time
+
+		// Set all to off first
 		this.clearType();
 
 		let setType = document.getElementById("set_type");
@@ -509,6 +610,8 @@ const booking =
 
 	clearType()
 	{
+		// Function is to set all booking type buttons off
+
 		const timeSlots = [ "bt_1", "bt_2", "bt_3", "bt_4" ];
 
 		timeSlots.forEach((tsName) => 
@@ -522,35 +625,39 @@ const booking =
 
 	viewPatientDetail(patientIndex)
 	{
+		// This is to view the patient detail when a user double clicks on the patient dropdown field
+
 		let bits = patientIndex.split("@@");
 		let patientUid = bits[0];
 
+		// Set async data
 		let formData = { 'patient_uid': patientUid };
-		
         let phpUrl = baseUrl + "booking/view_add_patient_info";
         
+		// Do async and display view
         sendData(phpUrl, formData)
         .then(result => { this.setViewInfo(result, 0); });
 	},
 
 	getPatientDebtor(patientIndex)
 	{
+		// This is to fetch the debtor linked to the patients and auto add the dat to the debtor name field
+
 		let debtorName = document.getElementById("debtor_name");
 		let bits = patientIndex.split("@@");
 		let debtorUid = bits[1];
 
-		console.log('Debtor id: ' + debtorUid);
-
 		if (debtorUid != undefined)
 		{
+			// Set async data
 			let formData = { 'debtor_uid': debtorUid };
-		
 			let phpUrl = baseUrl + "booking/get_patient_debtor";
 			
+			// Do async
 			sendData(phpUrl, formData)
 			.then(result => 
 			{ 
-				console.log('Result: ' + result);
+				// Set the value of debtor anme field
 				debtorName.value = result;
 			});
 		} 
@@ -562,7 +669,7 @@ const booking =
 		
 	},
 
-	// Unit testing examples
+	// Unit testing examples: Run npm test to view results
 	addNumbers(a, b)
 	{
 		return a + b;

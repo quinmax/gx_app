@@ -1,4 +1,5 @@
 <?php
+// Get booking start time and split into date and time
 $start_time = $view_record->start_time;
 $bits = explode("T", $start_time);
 $get_date = $bits[0];
@@ -122,9 +123,10 @@ $get_time = $bits[1];
 
 	<!-- Form close button -->
 	<div class="mt_lrg">
-		<div class="action_button mr_med" onclick="closeForm()"><i class="fa-regular fa-circle-xmark fa_col_primary pr_sml"></i>Close</div>
+		<div class="action_button mr_med" onclick="closeForm()">Close</div>
 	</div>
 	
 	<!-- Close icon -->
 	<div class="close_btn" onclick="closeForm()"><i class="fa-regular fa-circle-xmark"></i></div>
+	
 </div>

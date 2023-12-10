@@ -3,6 +3,7 @@ $reports = array('0' => 'Please select...', '1' => 'All bookings (by date)', '2'
 ?>
 <div class="main_container">
 
+	<!-- Load topbar for diary list page  -->
 	<?php $this->load->view($topbar); ?>
 
 	<div class="main_content">
@@ -16,8 +17,9 @@ $reports = array('0' => 'Please select...', '1' => 'All bookings (by date)', '2'
 			</div>
 		</div>
 
-		<!-- Diary list data grid -->
+		<!-- Datagrid: Diary list start -->
 		<div class="datagrid_container">
+
 			<div class="title mb_sml">Select a diary</div>
 			<div class="datagrid_wrapper" style="grid-template-columns: 50px 100px 1fr 1fr auto auto; column-gap: 5px;">
 
@@ -29,6 +31,7 @@ $reports = array('0' => 'Please select...', '1' => 'All bookings (by date)', '2'
 				<div class="col_title">Service Center ID</div>
 				<div class="col_title">Active</div>
 
+				<!-- Datagrid: data/records -->
 				<?php
 				foreach($records as $row)
 				{

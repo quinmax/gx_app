@@ -17,6 +17,7 @@ include(baseUrl + "res/js/booking.js");
 include(baseUrl + "res/js/validate.js");
 include(baseUrl + "res/js/home.js");
 
+// Async for api/http calls
 async function sendData(phpUrl, formData) 
 {	
 	let result = "error";
@@ -44,6 +45,8 @@ function init()
 
 function spinner()
 {
+	// Show a spinner on the screen and switch off
+	
     let loader = document.getElementById("loader");
     let mode = loader.style.display;
     

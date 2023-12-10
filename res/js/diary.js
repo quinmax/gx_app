@@ -2,9 +2,14 @@ const diary =
 {
 	selectDiary(id, diaryName)
 	{
+		// Set cookie
 		this.setCookie('diary_uid', id, 1);
 		this.setCookie('diary_name', diaryName, 1);
 
+		// Start spinner
+		spinner();
+		
+		// Goto bookling list
 		router.booking_list();
 	},
 

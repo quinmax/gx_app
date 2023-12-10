@@ -10,11 +10,12 @@
 			<div class="label">Date</div>
 			<div class="data"><?php echo form_input('booking_date', $start_date, 'id="booking_date" style="width: 275px;"'); ?></div>
 
+			<!-- Validation error -->
 			<div id="err_date" class="form_error">Please enter a date</div>
 
 		</div>
 
-		<!-- Available: Time slots - Taken slots are greyed out, available are white with black border, blue when selected -->
+		<!-- Select a booking time -->
 		<!-- Row 1 -->
 		<div id="fg_start_time" class="form_group">
 
@@ -36,11 +37,12 @@
 				<div id="ts_10" class="<?php echo $time_class[9]; ?>" onclick="booking.selectTimeSlot(10)">17:00</div>
 			</div>
 
+			<!-- Validation error -->
 			<div id="err_start_time" class="form_error">Please select a start time</div>
 
 		</div>
 
-		<!-- Duration: All buttons available, blue when selected -->
+		<!-- Select Duration -->
 		<div id="fg_duration" class="form_group">
 			<div class="label">Duration (Minutes)</div>
 			<div class="form_four_columns">
@@ -50,10 +52,11 @@
 				<div id="dr_4" class="<?php echo $duration_class[3]; ?>" onclick="booking.selectDuration(4)">60</div>
 			</div>
 
+			<!-- Validation error -->
 			<div id="err_duration" class="form_error">Please select the duration</div>
 		</div>
 
-		<!-- Booking Type: All buttons available, blue when selected -->
+		<!-- Select Booking Type -->
 		<div id="fg_type"  class="form_group">
 			<div class="label">Booking Type</div>
 			<div class="form_four_columns">
@@ -63,6 +66,7 @@
 				<div id="bt_4" class="<?php echo $type_class[3]; ?>" onclick="booking.selectType(4)">Out of office</div>
 			</div>
 
+			<!-- Validation error -->
 			<div id="err_type" class="form_error">Please select a booking type</div>
 
 		</div>
@@ -79,6 +83,7 @@
 					
 					<div style="font-size: 1rem; font-style: italic; text-transform: none">(Double click on selected patient to view details)</div>
 					
+					<!-- Validation error -->
 					<div id="err_patient" class="form_error">Please select a patient</div>
 
 				</div>
@@ -102,12 +107,10 @@
 						echo form_dropdown('reason_select', $reasons, '0', 'id="reason_select" style="width: 100%" onchange="booking.setReason()"'); ?>
 					</div>
 
+					<!-- Validation error -->
 					<div id="err_reason" class="form_error">Please select or enter a reason</div>
 
-				<!-- </div> -->
-				<!-- <div class="mt_med"> -->
 					<?php echo form_input('reason', $reason, 'id="reason" style="margin-top: 5px; width: 100%" placeholder="Enter reason"'); ?>
-				<!-- </div> -->
 			</div>
 
 
@@ -116,6 +119,7 @@
 		<!-- Form buttons: 4 columns (1fr auto auto 1fr) -->
 		<div class="form_button_bar mt_lrg">
 			<div>
+				<!-- Hidden fields used for storing edit id and for selecting time and duration -->
 				<?php echo form_input('booking_uid', $uid, 'id="booking_uid" style="display: none"'); ?>
 				<?php echo form_input('set_time', $set_time, 'id="set_time" style="display: none"'); ?>
 				<?php echo form_input('set_duration', $set_duration, 'id="set_duration" style="display: none"'); ?>
@@ -127,16 +131,7 @@
 
 	</div>
 
-	<!-- Close icon -->
+	<!-- Close icon: top right -->
 	<div class="close_btn" onclick="closeForm()"><i class="fa-regular fa-circle-xmark"></i></div>
 
 </div>
-<script>
-const startPicker = new Litepicker({ 
-	console.log('AAA');
-    element: document.getElementById('booking_date')
-  });
-const bbb = new Litepicker({ 
-	element: document.getElementById('reason_other')
-});
-</script>

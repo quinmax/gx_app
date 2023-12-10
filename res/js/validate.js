@@ -2,10 +2,12 @@ const validate =
 {
 	bookingDate(errCtr)
 	{
+		// Fetch validate field, reference display error items
 		let fieldItem = document.getElementById("booking_date");
 		let fieldGroup = document.getElementById("fg_date");
 		let fieldError = document.getElementById("err_date");
 
+		// Check if empty: if empty increade err counter and set error items else set error items to "no error"
 		if (fieldItem.value.trim().length == 0)
 		{
 			fieldGroup.style.backgroundColor = "#FFEBEE";
@@ -28,11 +30,13 @@ const validate =
 
 	startTime(errCtr)
 	{
+		// Fetch display error items
 		let fgStartTime = document.getElementById("fg_start_time");
 		let errStartTime = document.getElementById("err_start_time");
 		const fieldItems = [ "ts_1", "ts_2", "ts_3", "ts_4", "ts_5", "ts_6", "ts_7", "ts_8", "ts_9", "ts_10" ];
 		let bgCtr = 0;
 
+		// Check if the button has been selected or not and increase bgCtr if it hasn't
 		for (let i = 0; i < 10; i++)
 		{
 			let btn = document.getElementById(fieldItems[i]);
@@ -43,6 +47,7 @@ const validate =
 			}
 		}
 
+		// If all buttons were off bgCtr should be 8: Set error items else set error items to "no error"
         if (bgCtr == 8)
         {
             errCtr++;
@@ -65,11 +70,13 @@ const validate =
 
 	duration(errCtr)
 	{
+		// Fetch display error items
 		let fgDuration = document.getElementById("fg_duration");
 		let errDuration = document.getElementById("err_duration");
 		const fieldItems = [ "dr_1", "dr_2", "dr_3", "dr_4" ];
 		let bgCtr = 0;
 
+		// Check if the button has been selected or not and increase bgCtr if it hasn't
 		for (let i = 0; i < 4; i++)
 		{
 			let btn = document.getElementById(fieldItems[i]);
@@ -80,6 +87,7 @@ const validate =
 			}
 		}
 
+		// If all buttons were off bgCtr should be 4: Set error items else set error items to "no error"
         if (bgCtr == 4)
         {
             errCtr++;
@@ -102,11 +110,13 @@ const validate =
 
 	type(errCtr)
 	{
+		// Fetch display error items
 		let fgType = document.getElementById("fg_type");
 		let errType = document.getElementById("err_type");
 		const fieldItems = [ "bt_1", "bt_2", "bt_3", "bt_4" ];
 		let bgCtr = 0;
 
+		// Check if the button has been selected or not and increase bgCtr if it hasn't
 		for (let i = 0; i < 4; i++)
 		{
 			let btn = document.getElementById(fieldItems[i]);
@@ -117,6 +127,7 @@ const validate =
 			}
 		}
 
+		// If all buttons were off bgCtr should be 4: Set error items else set error items to "no error"
         if (bgCtr == 4)
         {
             errCtr++;
@@ -139,10 +150,12 @@ const validate =
 
 	patient(errCtr)
 	{
+		// Fetch validate field, reference display error items
 		let patient = document.getElementById("patient");
 		let fgPatient = document.getElementById("fg_patient");
 		let errPatient = document.getElementById("err_patient");
 
+		// Check if empty: if empty increade err counter and set error items else set error items to "no error"
 		if (patient.value == 0)
         {
             errCtr++;
@@ -165,10 +178,12 @@ const validate =
 
 	reason(errCtr)
 	{
+		// Fetch validate field, reference display error items
 		let reason = document.getElementById("reason");
 		let fgReason = document.getElementById("fg_reason");
 		let errReason = document.getElementById("err_reason");
 
+		// Check if empty: if empty increade err counter and set error items else set error items to "no error"
 		if (reason.value.trim() == "")
         {
             errCtr++;

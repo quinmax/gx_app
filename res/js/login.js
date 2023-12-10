@@ -4,8 +4,10 @@ const login =
 	{
 		spinner();
 
+		// Get creds from form
 		let credOne = document.getElementById("cred_1").value.trim();
 		let credTwo = document.getElementById("cred_2").value.trim();
+		let loginError = document.getElementById("login_error");
 
         let formData = { "cred_1": credOne, "cred_2": credTwo };
 
@@ -14,21 +16,26 @@ const login =
         sendData(phpUrl, formData)
         .then(result => 
         {
+			// Start spinner
             spinner();
-
+			
 			const loginResponse = JSON.parse(result);
 			
 			if (loginResponse.status === "AUTH_FAILED:CREDENTIALS")
 			{
 				console.log('FAIL');
+				
+				loginError.style.display = "flex";
 			}
 			else 
 			{
 				const uid = loginResponse.data.uid;
 				
+				// Set uid cookie
 				this.setCookie('uid', uid, 1);
 				this.setCookie('entity_uid', "1", 1);
 				
+				// Goto diary list
 				router.diary_list();
 			}
         });

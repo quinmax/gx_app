@@ -6,7 +6,7 @@
 <div class="topbar">
 
 	<div class="middle"><?php echo img($img_topbar_logo); ?></div>
-	<div class="menu_btn mr_med c_p" onclick="router.diary_list()">Diary</div>
+	<div class="menu_btn mr_med c_p" style="background-color: var(--app-secondary); color: white" onclick="router.diary_list()">Diary</div>
 	<div class="menu_btn c_d">Bookings</div>
 	<div class="middle">&nbsp;</div>
 	

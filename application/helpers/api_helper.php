@@ -1,39 +1,8 @@
 <?php 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-function login_old($cred_1, $cred_2)
-{
-	/** 
-	 * Commented out for dev/testing
-	 * applicant_001
-	 * app001
-	 * 
-	 * Fail: echo '{"status":"AUTH_FAILED:CREDENTIALS"}';
-	 * Pass: echo '{"status":"OK","data":{"uid":"0434abc5-cf20-45c3-a904-0e470b9c5610"}}';
-	 */
-	
-	$url = 'https://dev_interview.qagoodx.co.za/api/session';
-
-	$san_cred_1 = filter_var($cred_1, FILTER_SANITIZE_STRING);
-	$san_cred_2 = filter_var($cred_2, FILTER_SANITIZE_STRING);
-
-	$post_array = array();
-
-	$post_array['model'] = array('timeout' => 259200);
-	$post_array['auth'][0] = array(0 => 'password', array('username' => $san_cred_1, 'password' => $san_cred_2));
-	
-	$data = json_encode($post_array);
-
-	$result = post_api_call($url, $data);
-
-	echo $result;
-}
-
 function login($cred_1, $cred_2)
 {
-	$san_cred_1 = filter_var($cred_1, FILTER_SANITIZE_STRING);
-	$san_cred_2 = filter_var($cred_2, FILTER_SANITIZE_STRING);
-
 	$curl = curl_init();
 
 	curl_setopt_array($curl, array(
@@ -54,8 +23,8 @@ function login($cred_1, $cred_2)
 			[
 				"password",
 				{
-					"username": "' . $san_cred_1 . '",
-					"password": "' . $san_cred_2 . '"
+					"username": "' . $cred_1 . '",
+					"password": "' . $cred_2 . '"
 				}
 			]
 		]
@@ -73,7 +42,7 @@ function login($cred_1, $cred_2)
 	echo $response;
 }
 
-function get_diaries($uid)
+function get_diaries()
 {
 	$curl = curl_init();
 
@@ -311,8 +280,6 @@ function create_booking($entity_uid, $diary_uid, $booking_type_uid, $booking_sta
 function update_booking($booking_uid, $start_time, $duration, $patient_uid, $reason)
 {
 	$curl = curl_init();
-
-	// echo "AAA: $booking_uid, $start_time, $duration, $patient_uid, $reason";
 
 	curl_setopt_array($curl, array(
 		CURLOPT_URL => 'https://dev_interview.qagoodx.co.za/api/booking/' . $booking_uid,

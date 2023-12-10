@@ -29,6 +29,9 @@ $img_login_logo = array('src' => base_url() . 'res/images/login_logo', 'alt' => 
 	<!-- Submit login credentials -->
 	<div class="action_button mt_med" onclick="login.checkLogin()">Login</div>
 
+	<!-- Dsiplay login error -->
+	<div id="login_error" class="login_error mt_med">Invalid username or password. Please try again.</div>
+
 	<!-- Forgot password: not active (demo) -->
 	<div class="forgot mt_med">Forgot password</div>
 

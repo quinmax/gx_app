@@ -41,28 +41,28 @@
 
 </head>
 
-<body>
+	<body>
 
-	<div id="app_container">
-		<!-- <div class="main_container"> -->
-			<?php $this->load->view($main_content); ?>
-		<!-- </div> -->
-	</div>
+		<div id="app_container">
+			<!-- <div class="main_container"> -->
+				<?php $this->load->view($main_content); ?>
+			<!-- </div> -->
+		</div>
 
-	<!-- Form overlay 	
-	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	<div id="form_overlay"></div>
-	<!-- END: Form overlay -->
+		<!-- Form overlay 	
+		–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+		<div id="form_overlay"></div>
+		<!-- END: Form overlay -->
 
-	<!-- View overlay 	
-	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	<div id="view_overlay"></div>
-	<!-- END: View overlay -->
+		<!-- View overlay 	
+		–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+		<div id="view_overlay"></div>
+		<!-- END: View overlay -->
 
-	<!-- Spinner 
-	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	<div id="loader"></div>
-	<!-- END: Spinner -->
+		<!-- Spinner 
+		–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+		<div id="loader"></div>
+		<!-- END: Spinner -->
 
-</body>
+	</body>
 </html>
